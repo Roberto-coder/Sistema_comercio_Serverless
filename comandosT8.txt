@@ -1,0 +1,13 @@
+comandosT8
+
+dotnet add package MySql.Data
+dotnet add package Newtonsoft.Json
+dotnet build
+func start
+
+
+npm install -g azurite
+azurite
+
+
+http://localhost:7071/api/
