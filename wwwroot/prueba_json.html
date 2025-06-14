@@ -5,6 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
 		charset="utf-8">
 	<meta name="author" content="Carlos Pineda Guerrero, septiembre 2024">
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
 	<!-- Bootstrap 5 CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -12,6 +14,32 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script src='./WSClient.js'></script>
+
+	<style>
+		/* Estilos personalizados si son necesarios */
+		.toggle-password {
+			cursor: pointer;
+		}
+
+		.card {
+			transition: all 0.3s ease;
+		}
+
+		.card:hover {
+			box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		}
+
+		body {
+			/* ...existing code... */
+			background-color: #18181b !important;
+		}
+
+		.menu-overlay {
+			background: rgba(24, 24, 27, 0.7);
+			backdrop-filter: blur(2px);
+		}
+	</style>
+
 	<script>
 		//var URL = "/Servicio/rest/ws"; 
 		var URL = "http://localhost:7071/api";
@@ -585,7 +613,7 @@
 	</script>
 
 	<script>
-		// Escuchar clics en todos los botones con la clase .toggle-password
+		// Escuchar clics en todos los botones with la clase .toggle-password
 		document.addEventListener('DOMContentLoaded', () => {
 			document.querySelectorAll('.toggle-password').forEach(button => {
 				button.addEventListener('click', () => {
@@ -604,667 +632,751 @@
 
 </head>
 
-<body
-	style="background-color: aqua; background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+<body class="bg-zinc-900 min-h-screen text-zinc-200">
+	<!-- Barra superior -->
+	<nav
+		class="w-full flex items-center justify-between px-4 py-3 bg-zinc-800 border-b border-zinc-700 fixed top-0 left-0 z-30">
+		<!-- Botón menú hamburguesa -->
+		<button id="btn-menu" class="text-zinc-200 hover:text-blue-400 focus:outline-none text-2xl" aria-label="Menú">
+			<i class="bi bi-list"></i>
+		</button>
+		<span class="font-bold text-lg tracking-wide">Sistema de Comercio</span>
+		<!-- Botón login icono -->
+		<button onclick="muestra_pantalla('login')"
+			class="text-zinc-200 hover:text-blue-400 focus:outline-none text-2xl" aria-label="Login">
+			<i class="bi bi-person-circle"></i>
+		</button>
+	</nav>
 
-	<div class="container" style="max-width: 500px;">
-		<div id="alta_usuario" class="container my-5" style="display:none;">
-			<div class="card shadow-lg border-0 rounded-3">
-				<div class="card-header bg-primary text-white text-center py-3">
-					<h2 class="mb-0">Alta de usuario</h2>
-				</div>
-				<div class="card-body p-4">
-					<form id="form-alta-usuario">
-						<!-- Email -->
-						<div class="mb-3">
-							<label for="alta_email" class="form-label fw-bold">Email <span
-									class="text-danger">*</span></label>
-							<input type="email" class="form-control form-control-lg" id="alta_email" required>
-							<div class="invalid-feedback">Por favor ingresa un email válido.</div>
-						</div>
-
-						<!-- Password -->
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								<label for="alta_password" class="form-label fw-bold">Contraseña <span
-										class="text-danger">*</span></label>
-								<div class="input-group">
-									<input type="password" class="form-control" id="alta_password" required>
-									<button class="btn btn-outline-secondary toggle-password" type="button">
-										<i class="bi bi-eye"></i>
-									</button>
-								</div>
-								<div class="form-text">Mínimo 8 caracteres</div>
-							</div>
-							<div class="col-md-6 mb-3">
-								<label for="alta_confirm_password" class="form-label fw-bold">Confirmar Contraseña <span
-										class="text-danger">*</span></label>
-								<div class="input-group">
-									<input type="password" class="form-control" id="alta_confirm_password" required>
-									<button class="btn btn-outline-secondary toggle-password" type="button">
-										<i class="bi bi-eye"></i>
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<!-- Nombre -->
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								<label for="alta_nombre" class="form-label fw-bold">Nombre <span
-										class="text-danger">*</span></label>
-								<input type="text" class="form-control" id="alta_nombre" required>
-							</div>
-							<div class="col-md-6 mb-3">
-								<label for="alta_apellido_paterno" class="form-label fw-bold">Apellido paterno <span
-										class="text-danger">*</span></label>
-								<input type="text" class="form-control" id="alta_apellido_paterno" required>
-							</div>
-						</div>
-
-						<!-- Apellido materno -->
-						<div class="mb-3">
-							<label for="alta_apellido_materno" class="form-label">Apellido materno</label>
-							<input type="text" class="form-control" id="alta_apellido_materno">
-						</div>
-
-						<!-- Fecha y teléfono -->
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								<label for="alta_fecha_nacimiento" class="form-label fw-bold">Fecha de nacimiento <span
-										class="text-danger">*</span></label>
-								<input type="date" class="form-control" id="alta_fecha_nacimiento" required>
-							</div>
-							<div class="col-md-6 mb-3">
-								<label for="alta_telefono" class="form-label">Teléfono</label>
-								<input type="tel" class="form-control" id="alta_telefono" pattern="[0-9]{10}">
-							</div>
-						</div>
-
-						<!-- Género -->
-						<div class="mb-3">
-							<label for="alta_genero" class="form-label">Género</label>
-							<select id="alta_genero" class="form-select">
-								<option value="" selected disabled>Seleccionar</option>
-								<option value="Masculino">Masculino</option>
-								<option value="Femenino">Femenino</option>
-							</select>
-						</div>
-
-						<!-- Foto -->
-						<div class="mb-3 text-center">
-							<div class="d-flex flex-column align-items-center">
-								<img id="alta_imagen" class="img-thumbnail mb-3" width="150" src="./usuario_sin_foto.png"
-									style="object-fit: cover; height: 150px;">
-								<div class="w-100">
-									<input type="file" class="form-control" id="alta_foto"
-										onchange="readSingleFile(files,get('alta_imagen'))" accept="image/*">
-									<small class="text-muted">Formatos aceptados: JPG, PNG (Máx. 2MB)</small>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="card-footer bg-light py-3">
-					<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-						<button type="button" class="btn btn-outline-secondary me-md-2" onclick="limpia_alta()">
-							<i class="bi bi-eraser me-2"></i>Limpiar
-						</button>
-						<button type="button" class="btn btn-outline-primary me-md-2"
-							onclick="oculta_pantalla('alta_usuario')">
-							<i class="bi bi-arrow-left me-2"></i>Regresar
-						</button>
-						<button type="button" class="btn btn-success" onclick="alta()">
-							<i class="bi bi-person-plus me-2"></i>Agregar usuario
-						</button>
-					</div>
-				</div>
+	<!-- Menú lateral desplegable -->
+	<div id="sidebar-menu"
+		class="fixed top-0 left-0 h-full w-64 bg-zinc-800 shadow-lg z-40 transform -translate-x-full transition-transform duration-200">
+		<div class="flex flex-col h-full">
+			<div class="flex items-center justify-between px-4 py-4 border-b border-zinc-700">
+				<span class="font-bold text-lg text-blue-400">Usuarios</span>
+				<button onclick="toggleMenu()" class="text-zinc-400 hover:text-red-400 text-2xl"
+					aria-label="Cerrar menú">
+					<i class="bi bi-x-lg"></i>
+				</button>
+			</div>
+			<div class="flex-1 flex flex-col gap-4 px-4 py-6">
+				<button onclick="limpia_alta();muestra_pantalla('alta_usuario');toggleMenu()"
+					class="flex flex-col items-center gap-1 px-3 py-4 rounded hover:bg-zinc-700 text-center">
+					<i class="bi bi-person-plus" style="font-size:2.2rem"></i>
+					<span class="text-xs mt-1">Alta de Usuario</span>
+				</button>
+				<button onclick="limpia_consulta();muestra_pantalla('consulta_usuario');toggleMenu()"
+					class="flex flex-col items-center gap-1 px-3 py-4 rounded hover:bg-zinc-700 text-center">
+					<i class="bi bi-search" style="font-size:2.2rem"></i>
+					<span class="text-xs mt-1">Consulta Usuario</span>
+				</button>
+				<button onclick="limpia_borra();muestra_pantalla('borra_usuario');toggleMenu()"
+					class="flex flex-col items-center gap-1 px-3 py-4 rounded hover:bg-zinc-700 text-center">
+					<i class="bi bi-person-x" style="font-size:2.2rem"></i>
+					<span class="text-xs mt-1">Eliminar Usuario</span>
+				</button>
 			</div>
 		</div>
+	</div>
+	<!-- Overlay para cerrar menú -->
+	<div id="menu-overlay" class="hidden fixed inset-0 z-30 menu-overlay" onclick="toggleMenu()"></div>
 
-		<div id="consulta_usuario" class="container my-5" style="display:none">
-			<div class="card shadow">
-				<!-- Encabezado de Consulta -->
-				<div id="encabezado_consulta" class="card-header bg-info text-white text-center py-3">
-					<h2 class="mb-0">Consulta de Usuario</h2>
-				</div>
-
-				<!-- Encabezado de Modificación (oculto inicialmente) -->
-				<div id="encabezado_modifica" class="card-header bg-warning text-dark text-center py-3"
-					style="display:none">
-					<h2 class="mb-0">Modificar Usuario</h2>
-				</div>
-
-				<div class="card-body">
-					<!-- Formulario de Búsqueda -->
-					<div class="mb-4">
-						<label for="consulta_email" class="form-label fw-bold">Email <span
-								class="text-danger">*</span></label>
-						<div class="input-group">
-							<input type="email" class="form-control" id="consulta_email"
-								placeholder="usuario@dominio.com" required>
-							<button id="boton_consulta" class="btn btn-primary" type="button" onclick="consulta()">
-								<i class="bi bi-search me-2"></i>Buscar
-							</button>
-						</div>
+	<div class="flex flex-col items-center justify-center min-h-screen py-8" style="padding-top:4.5rem;">
+		<div class="w-full max-w-xl px-2">
+			<!-- Alta usuario -->
+			<div id="alta_usuario" class="container my-5" style="display:none;">
+				<div class="bg-zinc-800 shadow-lg border-0 rounded-3 border border-zinc-700">
+					<div class="bg-blue-800 text-zinc-100 text-center py-3 rounded-t-3">
+						<h2 class="mb-0">Alta de usuario</h2>
 					</div>
-
-					<!-- Formulario de Modificación (oculto inicialmente) -->
-					<div id="modifica_usuario" style="display:none">
-						<form id="form-modifica-usuario">
-
-							<div class="row">
-								<div class="col-md-6 mb-3">
-									<label for="modifica_password" class="form-label">Nueva Contraseña</label>
-									<div class="input-group">
-										<input type="password" class="form-control" id="modifica_password">
-										<button class="btn btn-outline-secondary toggle-password" type="button">
-											<i class="bi bi-eye"></i>
-										</button>
-									</div>
-								</div>
-								<div class="col-md-6 mb-3">
-									<label for="modifica_confirm_password" class="form-label">Confirmar Nueva
-										Contraseña</label>
-									<div class="input-group">
-										<input type="password" class="form-control" id="modifica_confirm_password">
-										<button class="btn btn-outline-secondary toggle-password" type="button">
-											<i class="bi bi-eye"></i>
-										</button>
-									</div>
-								</div>
+					<div class="card-body p-4">
+						<form id="form-alta-usuario">
+							<!-- Email -->
+							<div class="mb-3">
+								<label for="alta_email" class="form-label fw-bold">Email <span
+										class="text-danger">*</span></label>
+								<input type="email" class="form-control form-control-lg" id="alta_email" required>
+								<div class="invalid-feedback">Por favor ingresa un email válido.</div>
 							</div>
 
+							<!-- Password -->
 							<div class="row">
 								<div class="col-md-6 mb-3">
-									<label for="consulta_nombre" class="form-label fw-bold">Nombre <span
+									<label for="alta_password" class="form-label fw-bold">Contraseña <span
 											class="text-danger">*</span></label>
-									<input type="text" class="form-control" id="consulta_nombre" required>
+									<div class="input-group">
+										<input type="password" class="form-control" id="alta_password" required>
+										<button class="btn btn-outline-secondary toggle-password" type="button">
+											<i class="bi bi-eye"></i>
+										</button>
+									</div>
+									<div class="form-text">Mínimo 8 caracteres</div>
 								</div>
 								<div class="col-md-6 mb-3">
-									<label for="consulta_apellido_paterno" class="form-label fw-bold">Apellido Paterno
+									<label for="alta_confirm_password" class="form-label fw-bold">Confirmar Contraseña
 										<span class="text-danger">*</span></label>
-									<input type="text" class="form-control" id="consulta_apellido_paterno" required>
+									<div class="input-group">
+										<input type="password" class="form-control" id="alta_confirm_password" required>
+										<button class="btn btn-outline-secondary toggle-password" type="button">
+											<i class="bi bi-eye"></i>
+										</button>
+									</div>
 								</div>
 							</div>
 
-							<div class="mb-3">
-								<label for="consulta_apellido_materno" class="form-label">Apellido Materno</label>
-								<input type="text" class="form-control" id="consulta_apellido_materno">
-							</div>
-
+							<!-- Nombre -->
 							<div class="row">
 								<div class="col-md-6 mb-3">
-									<label for="consulta_fecha_nacimiento" class="form-label fw-bold">Fecha de
-										Nacimiento <span class="text-danger">*</span></label>
-									<input type="date" class="form-control" id="consulta_fecha_nacimiento" required>
+									<label for="alta_nombre" class="form-label fw-bold">Nombre <span
+											class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="alta_nombre" required>
 								</div>
 								<div class="col-md-6 mb-3">
-									<label for="consulta_telefono" class="form-label">Teléfono</label>
-									<input type="tel" class="form-control" id="consulta_telefono" pattern="[0-9]{10}">
+									<label for="alta_apellido_paterno" class="form-label fw-bold">Apellido paterno <span
+											class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="alta_apellido_paterno" required>
 								</div>
 							</div>
 
+							<!-- Apellido materno -->
 							<div class="mb-3">
-								<label for="consulta_genero" class="form-label">Género</label>
-								<select id="consulta_genero" class="form-select">
+								<label for="alta_apellido_materno" class="form-label">Apellido materno</label>
+								<input type="text" class="form-control" id="alta_apellido_materno">
+							</div>
+
+							<!-- Fecha y teléfono -->
+							<div class="row">
+								<div class="col-md-6 mb-3">
+									<label for="alta_fecha_nacimiento" class="form-label fw-bold">Fecha de nacimiento
+										<span class="text-danger">*</span></label>
+									<input type="date" class="form-control" id="alta_fecha_nacimiento" required>
+								</div>
+								<div class="col-md-6 mb-3">
+									<label for="alta_telefono" class="form-label">Teléfono</label>
+									<input type="tel" class="form-control" id="alta_telefono" pattern="[0-9]{10}">
+								</div>
+							</div>
+
+							<!-- Género -->
+							<div class="mb-3">
+								<label for="alta_genero" class="form-label">Género</label>
+								<select id="alta_genero" class="form-select">
 									<option value="" selected disabled>Seleccionar</option>
 									<option value="Masculino">Masculino</option>
 									<option value="Femenino">Femenino</option>
 								</select>
 							</div>
 
-							<div class="mb-4 text-center">
+							<!-- Foto -->
+							<div class="mb-3 text-center">
 								<div class="d-flex flex-column align-items-center">
-									<img id="consulta_imagen" class="img-thumbnail mb-3" width="150"
+									<img id="alta_imagen" class="img-thumbnail mb-3" width="150"
 										src="./usuario_sin_foto.png" style="object-fit: cover; height: 150px;">
-									<div class="d-flex gap-2">
-										<div class="flex-grow-1">
-											<input type="file" class="form-control" id="consulta_file"
-												onchange="readSingleFile(files,get('consulta_imagen'))"
-												accept="image/*">
-										</div>
-										<button type="button" class="btn btn-outline-danger" onclick="quita_foto()">
-											<i class="bi bi-trash"></i>
-										</button>
+									<div class="w-100">
+										<input type="file" class="form-control" id="alta_foto"
+											onchange="readSingleFile(files,get('alta_imagen'))" accept="image/*">
+										<small class="text-muted">Formatos aceptados: JPG, PNG (Máx. 2MB)</small>
 									</div>
-									<small class="text-muted">Formatos aceptados: JPG, PNG (Máx. 2MB)</small>
 								</div>
 							</div>
 						</form>
 					</div>
-				</div>
-
-				<div class="card-footer bg-light py-3">
-					<div class="d-flex justify-content-between">
-						<button type="button" class="btn btn-outline-secondary" onclick="cierra_pantalla_consulta()">
-							<i class="bi bi-arrow-left me-2"></i>Regresar
-						</button>
-						<button id="boton-guardar" type="button" class="btn btn-success" onclick="modifica()"
-							style="display:none">
-							<i class="bi bi-save me-2"></i>Guardar Cambios
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="borra_usuario" class="container my-5" style="display:none">
-			<div class="card border-danger shadow">
-				<div class="card-header bg-danger text-white text-center py-3">
-					<h2 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Eliminar Usuario</h2>
-				</div>
-				<div class="card-body">
-					<div class="alert alert-warning">
-						<i class="bi bi-exclamation-circle-fill me-2"></i>Esta acción es irreversible. ¿Está seguro que
-						desea continuar?
-					</div>
-
-					<form id="form-borrar-usuario">
-						<div class="mb-4">
-							<label for="borra_email" class="form-label fw-bold">Email del usuario a eliminar <span
-									class="text-danger">*</span></label>
-							<input type="email" class="form-control" id="borra_email" placeholder="usuario@ejemplo.com"
-								required>
-							<div class="invalid-feedback">Por favor ingrese un email válido</div>
-						</div>
-
-						<div class="d-grid gap-3">
-							<button type="button" class="btn btn-danger btn-lg" onclick="confirmarBorrado()">
-								<i class="bi bi-trash-fill me-2"></i>Confirmar Eliminación
+					<div class="card-footer bg-zinc-900 py-3">
+						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+							<button type="button"
+								class="btn btn-outline-secondary me-md-2 text-zinc-200 border-zinc-500"
+								onclick="limpia_alta()">
+								<i class="bi bi-eraser me-2"></i>Limpiar
 							</button>
-							<button type="button" class="btn btn-outline-secondary"
-								onclick="oculta_pantalla('borra_usuario')">
-								<i class="bi bi-arrow-left me-2"></i>Cancelar y Regresar
+							<button type="button" class="btn btn-outline-primary me-md-2 text-blue-400 border-blue-400"
+								onclick="oculta_pantalla('alta_usuario')">
+								<i class="bi bi-arrow-left me-2"></i>Regresar
+							</button>
+							<button type="button" class="btn btn-success bg-green-700 border-green-700"
+								onclick="alta()">
+								<i class="bi bi-person-plus me-2"></i>Agregar usuario
 							</button>
 						</div>
-					</form>
-				</div>
-				<div class="card-footer bg-light text-muted small">
-					<i class="bi bi-info-circle-fill me-2"></i>Se eliminarán todos los datos asociados a este usuario.
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal de Confirmación -->
-		<div class="modal fade" id="confirmacionBorrado" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header bg-danger text-white">
-						<h5 class="modal-title"><i class="bi bi-exclamation-octagon-fill me-2"></i>Confirmar Eliminación
-						</h5>
-						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p>¿Está completamente seguro que desea eliminar permanentemente al usuario <strong
-								id="emailConfirmacion"></strong>?</p>
-						<p class="text-danger fw-bold">Esta acción no se puede deshacer.</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-							<i class="bi bi-x-circle me-2"></i>Cancelar
-						</button>
-						<button type="button" class="btn btn-danger" onclick="borra()" data-bs-dismiss="modal">
-							<i class="bi bi-check-circle me-2"></i>Sí, Eliminar
-						</button>
 					</div>
 				</div>
 			</div>
-		</div>
+			<!-- Consulta usuario -->
+			<div id="consulta_usuario" class="container mx-auto my-5 max-w-md" style="display:none">
+				<div class="bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-zinc-700">
+					<div id="encabezado_consulta" class="bg-blue-800 text-zinc-100 py-4 px-6 text-center">
+						<h2 class="text-xl font-bold">Consulta de Usuario</h2>
+					</div>
 
-		<script>
-			function confirmarBorrado() {
-				const email = document.getElementById('borra_email').value;
-				if (!email) {
-					alert('Por favor ingrese un email válido');
-					return;
-				}
+					<!-- Encabezado de Modificación -->
+					<div id="encabezado_modifica" class="bg-yellow-700 text-zinc-900 py-4 px-6 text-center"
+						style="display:none">
+						<h2 class="text-xl font-bold">Modificar Usuario</h2>
+					</div>
 
-				document.getElementById('emailConfirmacion').textContent = email;
-				const modal = new bootstrap.Modal(document.getElementById('confirmacionBorrado'));
-				modal.show();
-			}
-		</script>
-
-		<div id="menu" class="container my-5">
-			<div class="card shadow-sm">
-				<div class="card-header bg-primary text-white text-center py-3">
-					<h3 class="mb-0"><i class="bi bi-menu-button-wide me-2"></i>Menú Principal</h3>
-				</div>
-				<div class="card-body p-4">
-					<div class="d-grid gap-3">
-						<!-- Grupo Usuarios -->
-						<div class="mb-4">
-							<button type="button" onclick="muestra_pantalla('login')"
-								class="btn btn-primary w-100 my-2">
-								<i class="bi bi-box-arrow-in-right me-2"></i>Login
-							</button>
-							<h5 class="text-muted mb-3"><i class="bi bi-people-fill me-2"></i>Gestión de Usuarios</h5>
-							<div class="d-grid gap-2">
-								<button type="button" onclick="limpia_alta();muestra_pantalla('alta_usuario')"
-									class="btn btn-primary text-start">
-									<i class="bi bi-person-plus me-2"></i>Alta de Usuario
-								</button>
-								<button type="button" onclick="limpia_consulta();muestra_pantalla('consulta_usuario')"
-									class="btn btn-primary text-start">
-									<i class="bi bi-search me-2"></i>Consulta Usuario
-								</button>
-								<button type="button" onclick="limpia_borra();muestra_pantalla('borra_usuario')"
-									class="btn btn-outline-danger text-start">
-									<i class="bi bi-person-x me-2"></i>Eliminar Usuario
+					<div class="p-5">
+						<!-- Formulario de Búsqueda -->
+						<div class="mb-5">
+							<label for="consulta_email" class="block text-sm font-medium text-gray-700 mb-1">Email <span
+									class="text-red-500">*</span></label>
+							<div class="flex">
+								<input type="email" id="consulta_email" placeholder="usuario@dominio.com" required
+									class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+								<button id="boton_consulta" type="button" onclick="consulta()"
+									class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 transition">
+									<i class="bi bi-search mr-2"></i>Buscar
 								</button>
 							</div>
 						</div>
 
-						<!-- Grupo Artículos -->
-						<div class="mb-4">
-							<h5 class="text-muted mb-3"><i class="bi bi-box-seam-fill me-2"></i>Gestión de Artículos
+						<!-- Formulario de Modificación -->
+						<div id="modifica_usuario" style="display:none">
+							<form id="form-modifica-usuario">
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+									<div>
+										<label for="modifica_password"
+											class="block text-sm font-medium text-gray-700 mb-1">Nueva
+											Contraseña</label>
+										<div class="relative">
+											<input type="password" id="modifica_password"
+												class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											<button type="button"
+												class="absolute inset-y-0 right-0 px-3 flex items-center toggle-password">
+												<i class="bi bi-eye"></i>
+											</button>
+										</div>
+									</div>
+									<div>
+										<label for="modifica_confirm_password"
+											class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nueva
+											Contraseña</label>
+										<div class="relative">
+											<input type="password" id="modifica_confirm_password"
+												class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											<button type="button"
+												class="absolute inset-y-0 right-0 px-3 flex items-center toggle-password">
+												<i class="bi bi-eye"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+									<div>
+										<label for="consulta_nombre"
+											class="block text-sm font-medium text-gray-700 mb-1">Nombre <span
+												class="text-red-500">*</span></label>
+										<input type="text" id="consulta_nombre" required
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									</div>
+									<div>
+										<label for="consulta_apellido_paterno"
+											class="block text-sm font-medium text-gray-700 mb-1">Apellido Paterno <span
+												class="text-red-500">*</span></label>
+										<input type="text" id="consulta_apellido_paterno" required
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									</div>
+								</div>
+
+								<div class="mb-4">
+									<label for="consulta_apellido_materno"
+										class="block text-sm font-medium text-gray-700 mb-1">Apellido Materno</label>
+									<input type="text" id="consulta_apellido_materno"
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+								</div>
+
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+									<div>
+										<label for="consulta_fecha_nacimiento"
+											class="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento
+											<span class="text-red-500">*</span></label>
+										<input type="date" id="consulta_fecha_nacimiento" required
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									</div>
+									<div>
+										<label for="consulta_telefono"
+											class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+										<input type="tel" id="consulta_telefono" pattern="[0-9]{10}"
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									</div>
+								</div>
+
+								<div class="mb-4">
+									<label for="consulta_genero"
+										class="block text-sm font-medium text-gray-700 mb-1">Género</label>
+									<select id="consulta_genero"
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+										<option value="" selected disabled>Seleccionar</option>
+										<option value="Masculino">Masculino</option>
+										<option value="Femenino">Femenino</option>
+									</select>
+								</div>
+
+								<div class="mb-4 text-center">
+									<div class="flex flex-col items-center">
+										<img id="consulta_imagen" class="rounded-md mb-3 w-32 h-32 object-cover border"
+											src="./usuario_sin_foto.png">
+										<div class="flex gap-2 w-full">
+											<div class="flex-1">
+												<input type="file" id="consulta_file"
+													onchange="readSingleFile(files,get('consulta_imagen'))"
+													accept="image/*"
+													class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											</div>
+											<button type="button" onclick="quita_foto()"
+												class="px-3 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50">
+												<i class="bi bi-trash"></i>
+											</button>
+										</div>
+										<p class="text-xs text-gray-500 mt-1">Formatos aceptados: JPG, PNG (Máx. 2MB)
+										</p>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="bg-zinc-900 py-3 px-5">
+						<div class="flex justify-between">
+							<button type="button" onclick="cierra_pantalla_consulta()"
+								class="px-4 py-2 border border-blue-400 text-blue-400 rounded-md hover:bg-zinc-800">
+								<i class="bi bi-arrow-left mr-2"></i>Regresar
+							</button>
+							<button id="boton-guardar" type="button" onclick="modifica()" style="display:none"
+								class="px-4 py-2 bg-green-700 text-zinc-100 rounded-md hover:bg-green-800">
+								<i class="bi bi-save mr-2"></i>Guardar Cambios
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="borra_usuario" class="container mx-auto my-5 max-w-md" style="display:none">
+				<div class="bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-red-700">
+					<div class="bg-red-800 text-zinc-100 py-4 px-6 text-center">
+						<h2 class="text-xl font-bold"><i class="bi bi-exclamation-triangle-fill mr-2"></i>Eliminar
+							Usuario</h2>
+					</div>
+					<div class="p-5">
+						<div class="bg-yellow-900 text-yellow-200 p-3 rounded-md mb-4">
+							<i class="bi bi-exclamation-circle-fill mr-2"></i>Esta acción es irreversible. ¿Está seguro
+							que
+							desea continuar?
+						</div>
+
+						<form id="form-borrar-usuario">
+							<div class="mb-5">
+								<label for="borra_email" class="block text-sm font-medium text-gray-700 mb-1">Email del
+									usuario a eliminar <span class="text-red-500">*</span></label>
+								<input type="email" id="borra_email" placeholder="usuario@ejemplo.com" required
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+								<p class="mt-1 text-xs text-red-600 hidden">Por favor ingrese un email válido</p>
+							</div>
+
+							<div class="space-y-3">
+								<button type="button" onclick="confirmarBorrado()"
+									class="w-full px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700">
+									<i class="bi bi-trash-fill mr-2"></i>Confirmar Eliminación
+								</button>
+								<button type="button" onclick="oculta_pantalla('borra_usuario')"
+									class="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100">
+									<i class="bi bi-arrow-left mr-2"></i>Cancelar y Regresar
+								</button>
+							</div>
+						</form>
+					</div>
+					<div class="bg-zinc-900 text-zinc-400 text-xs p-3">
+						<i class="bi bi-info-circle-fill mr-2"></i>Se eliminarán todos los datos asociados a este
+						usuario.
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal de Confirmación -->
+			<div id="confirmacionBorrado"
+				class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+				<div class="bg-white rounded-lg max-w-md w-full">
+					<div class="bg-red-600 text-white py-3 px-4 rounded-t-lg">
+						<h5 class="text-lg font-semibold"><i class="bi bi-exclamation-octagon-fill mr-2"></i>Confirmar
+							Eliminación</h5>
+					</div>
+					<div class="p-4">
+						<p>¿Está completamente seguro que desea eliminar permanentemente al usuario <strong
+								id="emailConfirmacion" class="font-semibold"></strong>?</p>
+						<p class="text-red-600 font-bold mt-2">Esta acción no se puede deshacer.</p>
+					</div>
+					<div class="bg-gray-100 px-4 py-3 rounded-b-lg flex justify-end space-x-3">
+						<button type="button"
+							onclick="document.getElementById('confirmacionBorrado').classList.add('hidden')"
+							class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-200">
+							<i class="bi bi-x-circle mr-2"></i>Cancelar
+						</button>
+						<button type="button"
+							onclick="borra(); document.getElementById('confirmacionBorrado').classList.add('hidden')"
+							class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+							<i class="bi bi-check-circle mr-2"></i>Sí, Eliminar
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal de Confirmación -->
+			<div class="modal fade" id="confirmacionBorrado" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header bg-danger text-white">
+							<h5 class="modal-title"><i class="bi bi-exclamation-octagon-fill me-2"></i>Confirmar
+								Eliminación
 							</h5>
-							<div class="d-grid gap-2">
+							<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p>¿Está completamente seguro que desea eliminar permanentemente al usuario <strong
+									id="emailConfirmacion"></strong>?</p>
+							<p class="text-danger fw-bold">Esta acción no se puede deshacer.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+								<i class="bi bi-x-circle me-2"></i>Cancelar
+							</button>
+							<button type="button" class="btn btn-danger" onclick="borra()" data-bs-dismiss="modal">
+								<i class="bi bi-check-circle me-2"></i>Sí, Eliminar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				function confirmarBorrado() {
+					const email = document.getElementById('borra_email').value;
+					if (!email) {
+						alert('Por favor ingrese un email válido');
+						return;
+					}
+
+					document.getElementById('emailConfirmacion').textContent = email;
+					const modal = new bootstrap.Modal(document.getElementById('confirmacionBorrado'));
+					modal.show();
+				}
+			</script>
+
+			<div id="menu" class="mx-auto my-5 max-w-md">
+				<div class="bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-zinc-700">
+					<div class="bg-blue-900 text-zinc-100 py-4 px-6 text-center">
+						<h3 class="text-xl font-bold flex items-center justify-center gap-2">
+							<i class="bi bi-house text-2xl text-blue-500 hover:text-blue-700"></i>Inicio
+						</h3>
+					</div>
+					<div class="p-5 space-y-6">
+						<!-- Grupo Artículos -->
+						<div>
+							<div class="w-full"> <!-- o cualquier ancho específico -->
+								<h5
+									class="text-gray-400 mb-3 text-sm font-medium flex items-center justify-center gap-2">
+									<i class="bi bi-box-seam-fill"></i>Gestión de Artículos
+								</h5>
+							</div>
+							<div class="flex gap-4 justify-center">
 								<button type="button" onclick="verificarLoginParaAltaArticulo()"
-									class="btn btn-success text-start">
-									<i class="bi bi-plus-circle me-2"></i>Captura de Artículo
+									class="flex flex-col items-center gap-1 px-3 py-4 rounded bg-green-500 hover:bg-green-600 text-white transition w-24">
+									<i class="bi bi-plus-circle" style="font-size:2.2rem"></i>
+									<span class="text-xs mt-1">Captura</span>
 								</button>
 								<button type="button" onclick="muestra_pantalla('consulta_articulos')"
-									class="btn btn-success text-start">
-									<i class="bi bi-search me-2"></i>Compra de Artículos
+									class="flex flex-col items-center gap-1 px-3 py-4 rounded bg-green-500 hover:bg-green-600 text-white transition w-24">
+									<i class="bi bi-search" style="font-size:2.2rem"></i>
+									<span class="text-xs mt-1">Comprar</span>
 								</button>
 							</div>
 						</div>
-
 						<!-- Carrito -->
-						<div>
-							<!-- <button type="button" onclick="muestra_pantalla('carrito'); cargarCarrito()" class="btn btn-warning text-start">
-								<i class="bi bi-cart-fill me-2"></i>Carrito de Compras
-								<span class="badge bg-danger rounded-pill float-end">3</span>
-							</button>-->
-							<button type="button" class="btn btn-warning w-100" onclick="verificarLoginParaCarrito()">
-								<i class="bi bi-cart-fill me-2"></i>Carrito de Compra
-								<span class="badge bg-danger rounded-pill float-end">3</span>
+						<div class="flex justify-center">
+							<button type="button"
+								class="flex flex-col items-center gap-1 px-3 py-4 rounded bg-yellow-500 hover:bg-yellow-600 text-white transition w-24 relative"
+								onclick="verificarLoginParaCarrito()">
+								<i class="bi bi-cart-fill" style="font-size:2.2rem"></i>
+								<span class="text-xs mt-1">Carrito</span>
+								<span
+									class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full py-0.5 px-2">3</span>
 							</button>
-
 						</div>
 					</div>
-				</div>
-				<div class="card-footer bg-light text-center py-3">
-					<small class="text-muted">Sistema de Gestión v2.0</small>
+					<div class="bg-zinc-900 text-zinc-400 text-center py-3 text-xs">
+						<i class="bi bi-info-circle mr-1"></i>Sistema de Comercio v2.0
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<!-- Login -->
-		<div id="login" class="container my-5" style="display:none;">
-			<div class="card shadow">
-				<div class="card-header bg-info text-white text-center py-3">
-					<h2 class="mb-0"><i class="bi bi-person-circle me-2"></i>Iniciar Sesión</h2>
-				</div>
-				<div class="card-body">
-					<form id="form-login">
-						<!-- Campo Email -->
-						<div class="mb-3">
-							<label for="login_email" class="form-label fw-bold">Email <span
-									class="text-danger">*</span></label>
-							<input type="email" class="form-control" id="login_email" placeholder="usuario@ejemplo.com"
-								required>
-						</div>
-
-						<!-- Campo Contraseña -->
-						<div class="mb-3">
-							<label for="login_password" class="form-label fw-bold">Contraseña <span
-									class="text-danger">*</span></label>
-							<div class="input-group">
-								<input type="password" class="form-control" id="login_password" required>
-								<button class="btn btn-outline-secondary toggle-password" type="button">
-									<i class="bi bi-eye"></i>
-								</button>
+			<!-- Login -->
+			<div id="login" class="mx-auto my-5 max-w-md" style="display:none;">
+				<div class="bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-zinc-700">
+					<div class="bg-blue-800 text-zinc-100 py-4 px-6 text-center">
+						<h2 class="text-xl font-bold flex items-center justify-center gap-2">
+							<i class="bi bi-person-circle"></i>Iniciar Sesión
+						</h2>
+					</div>
+					<div class="p-5">
+						<form id="form-login">
+							<!-- Campo Email -->
+							<div class="mb-4">
+								<label for="login_email" class="block text-sm font-medium text-gray-700 mb-1">Email
+									<span class="text-red-500">*</span></label>
+								<input type="email" id="login_email" placeholder="usuario@ejemplo.com" required
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
 							</div>
-						</div>
 
-						<!-- Opciones adicionales -->
-						<div class="mb-3 form-check">
-							<input type="checkbox" class="form-check-input" id="remember_me">
-							<label class="form-check-label" for="remember_me">Recordar mi sesión</label>
-						</div>
-					</form>
-				</div>
-				<div class="card-footer bg-light py-3">
-					<div class="d-grid gap-2">
-						<button type="button" class="btn btn-primary" onclick="enviarLogin()">
-							<i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
-						</button>
-						<button type="button" class="btn btn-outline-secondary" onclick="oculta_pantalla('login')">
-							<i class="bi bi-arrow-left me-2"></i>Regresar
-						</button>
-					</div>
-					<div class="text-center mt-3">
-						<a href="#" onclick="muestra_pantalla('recuperar_password')"
-							class="text-decoration-none">¿Olvidaste tu contraseña?</a>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="alta_articulo" class="container my-5" style="display:none;">
-			<div class="card shadow-lg border-0">
-				<div class="card-header bg-success text-white text-center py-3">
-					<h2 class="mb-0"><i class="bi bi-plus-square-fill me-2"></i>Alta de Artículo</h2>
-				</div>
-				<div class="card-body p-4">
-					<form id="form-alta-articulo">
-						<!-- Nombre y Descripción -->
-						<div class="mb-3">
-							<label for="articulo_nombre" class="form-label fw-bold">Nombre del Artículo <span
-									class="text-danger">*</span></label>
-							<input type="text" class="form-control" id="articulo_nombre"
-								placeholder="Ej: Laptop HP 15-dw1024la" required>
-						</div>
-
-						<div class="mb-3">
-							<label for="articulo_descripcion" class="form-label">Descripción Detallada</label>
-							<textarea class="form-control" id="articulo_descripcion" rows="3"
-								placeholder="Características principales del artículo..."></textarea>
-						</div>
-
-						<!-- Precio y Cantidad -->
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								<label for="articulo_precio" class="form-label fw-bold">Precio ($) <span
-										class="text-danger">*</span></label>
-								<div class="input-group">
-									<span class="input-group-text">$</span>
-									<input type="number" class="form-control" id="articulo_precio" step="0.01" min="0"
-										placeholder="0.00" required>
+							<!-- Campo Contraseña -->
+							<div class="mb-4">
+								<label for="login_password"
+									class="block text-sm font-medium text-gray-700 mb-1">Contraseña
+									<span class="text-red-500">*</span></label>
+								<div class="relative">
+									<input type="password" id="login_password" required
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									<button type="button"
+										class="absolute inset-y-0 right-0 px-3 flex items-center toggle-password">
+										<i class="bi bi-eye"></i>
+									</button>
 								</div>
 							</div>
-							<div class="col-md-6 mb-3">
-								<label for="articulo_cantidad" class="form-label fw-bold">Existencia <span
-										class="text-danger">*</span></label>
-								<input type="number" class="form-control" id="articulo_cantidad" min="0"
-									placeholder="Cantidad en stock" required>
-							</div>
-						</div>
 
-						<!-- Imagen del Artículo -->
-						<div class="mb-4 text-center">
-							<div class="d-flex flex-column align-items-center">
-								<img id="articulo_imagen" class="img-thumbnail mb-3" width="200"
-									src="/imagen_sin_foto.png"
-									style="object-fit: contain; height: 200px; background: #f8f9fa;">
-								<div class="w-100">
-									<label for="articulo_foto" class="form-label">Imagen del Artículo</label>
-									<input type="file" class="form-control" id="articulo_foto"
-										onchange="readSingleFile(files,get('articulo_imagen'))" accept="image/*">
-									<div class="form-text">Formatos aceptados: JPG, PNG (Máx. 2MB)</div>
+							<!-- Opciones adicionales -->
+							<div class="mb-4 flex items-center">
+								<input type="checkbox" id="remember_me"
+									class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+								<label for="remember_me" class="ml-2 block text-sm text-gray-700">Recordar mi
+									sesión</label>
+							</div>
+						</form>
+					</div>
+					<div class="bg-zinc-900 py-3 px-5">
+						<div class="space-y-2">
+							<button type="button" onclick="enviarLogin()"
+								class="w-full px-4 py-2 bg-blue-700 text-zinc-100 rounded-md hover:bg-blue-800 transition">
+								<i class="bi bi-box-arrow-in-right mr-2"></i>Iniciar Sesión
+							</button>
+							<button type="button" onclick="oculta_pantalla('login')"
+								class="w-full px-4 py-2 border border-zinc-500 text-zinc-200 rounded-md hover:bg-zinc-800 transition">
+								<i class="bi bi-arrow-left mr-2"></i>Regresar
+							</button>
+						</div>
+						<div class="text-center mt-3">
+							<a href="#" onclick="muestra_pantalla('recuperar_password')"
+								class="text-blue-400 text-sm hover:underline">¿Olvidaste tu contraseña?</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Alta artículo -->
+			<div id="alta_articulo" class="container mx-auto my-5 max-w-md" style="display:none;">
+				<div class="bg-zinc-800 rounded-lg shadow-lg overflow-hidden border border-zinc-700">
+					<div class="bg-green-800 text-zinc-100 py-4 px-6 text-center">
+						<h2 class="text-xl font-bold"><i class="bi bi-plus-square-fill mr-2"></i>Alta de Artículo</h2>
+					</div>
+					<div class="p-5">
+						<form id="form-alta-articulo">
+							<!-- Nombre y Descripción -->
+							<div class="mb-4">
+								<label for="articulo_nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre
+									del
+									Artículo <span class="text-red-500">*</span></label>
+								<input type="text" id="articulo_nombre" placeholder="Ej: Laptop HP 15-dw1024la" required
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+							</div>
+
+							<div class="mb-4">
+								<label for="articulo_descripcion"
+									class="block text-sm font-medium text-gray-700 mb-1">Descripción Detallada</label>
+								<textarea id="articulo_descripcion" rows="3"
+									placeholder="Características principales del artículo..."
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+							</div>
+
+							<!-- Precio y Cantidad -->
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+								<div>
+									<label for="articulo_precio"
+										class="block text-sm font-medium text-gray-700 mb-1">Precio
+										($) <span class="text-red-500">*</span></label>
+									<div class="flex">
+										<span
+											class="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-100 text-gray-700 rounded-l-md">$</span>
+										<input type="number" id="articulo_precio" step="0.01" min="0" placeholder="0.00"
+											required
+											class="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									</div>
+								</div>
+								<div>
+									<label for="articulo_cantidad"
+										class="block text-sm font-medium text-gray-700 mb-1">Existencia <span
+											class="text-red-500">*</span></label>
+									<input type="number" id="articulo_cantidad" min="0" placeholder="Cantidad en stock"
+										required
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
 								</div>
 							</div>
+
+							<!-- Imagen del Artículo -->
+							<div class="mb-4 text-center">
+								<div class="flex flex-col items-center">
+									<img id="articulo_imagen"
+										class="rounded-md mb-3 w-48 h-48 object-contain bg-gray-100 border"
+										src="/imagen_sin_foto.png">
+									<div class="w-full">
+										<label for="articulo_foto"
+											class="block text-sm font-medium text-gray-700 mb-1">Imagen del
+											Artículo</label>
+										<input type="file" id="articulo_foto"
+											onchange="readSingleFile(files,get('articulo_imagen'))" accept="image/*"
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+										<p class="text-xs text-gray-500 mt-1">Formatos aceptados: JPG, PNG (Máx. 2MB)
+										</p>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="bg-zinc-900 py-3 px-5">
+						<div class="flex justify-end space-x-2">
+							<button type="button" onclick="document.getElementById('form-alta-articulo').reset();"
+								class="px-4 py-2 border border-zinc-500 text-zinc-200 rounded-md hover:bg-zinc-800">
+								<i class="bi bi-eraser mr-2"></i>Limpiar Formulario
+							</button>
+							<button type="button" onclick="oculta_pantalla('alta_articulo')"
+								class="px-4 py-2 border border-blue-400 text-blue-400 rounded-md hover:bg-zinc-800">
+								<i class="bi bi-arrow-left mr-2"></i>Regresar
+							</button>
+							<button type="button" onclick="altaArticulo()"
+								class="px-4 py-2 bg-green-700 text-zinc-100 rounded-md hover:bg-green-800">
+								<i class="bi bi-save mr-2"></i>Guardar Artículo
+							</button>
 						</div>
-					</form>
-				</div>
-				<div class="card-footer bg-light py-3">
-					<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-						<button type="button" class="btn btn-outline-secondary me-md-2"
-							onclick="document.getElementById('form-alta-articulo').reset();">
-							<i class="bi bi-eraser me-2"></i>Limpiar Formulario
-						</button>
-						<button type="button" class="btn btn-outline-primary me-md-2"
-							onclick="oculta_pantalla('alta_articulo')">
-							<i class="bi bi-arrow-left me-2"></i>Regresar
-						</button>
-						<button type="button" class="btn btn-success" onclick="altaArticulo()">
-							<i class="bi bi-save me-2"></i>Guardar Artículo
-						</button>
 					</div>
 				</div>
 			</div>
+
+			<div class="modal fade" id="modalDetalleArticulo" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalDetalleTitulo">Detalle del Artículo</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body" id="modalDetalleContenido">
+							<!-- Contenido dinámico -->
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+							<button type="button" class="btn btn-primary">Agregar al carrito</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="carrito" class="container mx-auto my-5 max-w-md" style="display:none;">
+				<div class="bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-zinc-700">
+					<div class="bg-yellow-700 text-zinc-100 py-4 px-6 text-center">
+						<h3 class="text-xl font-bold"><i class="bi bi-cart-fill mr-2"></i>Carrito de Compras</h3>
+					</div>
+					<div class="p-5">
+						<!-- Resumen del Pedido -->
+						<div class="flex justify-between items-center mb-4 p-3 bg-gray-100 rounded-md">
+							<div class="flex items-center">
+								<span class="font-medium">Artículos:</span>
+								<span id="contador-articulos"
+									class="ml-2 bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-semibold"></span>
+							</div>
+							<div class="flex items-center">
+								<span class="font-medium">Total:</span>
+								<span id="total-articulos" class="ml-2 text-lg font-bold">$0.00</span>
+							</div>
+						</div>
+
+						<!-- Botón para proceder al pago -->
+						<div class="flex justify-end">
+							<button type="button" class="btn btn-success" data-bs-toggle="modal"
+								data-bs-target="#confirmacionPago">
+								<i class="bi bi-cart-check me-2"></i>Proceder al Pago
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal de Confirmación de Pago -->
+			<div class=" modal fade" id="confirmacionPago" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header bg-success text-white">
+							<h5 class="modal-title"><i class="bi bi-check-circle me-2"></i>Confirmar
+								Compra</h5>
+							<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p>¿Estás seguro que deseas proceder con el pago?</p>
+							<div class="alert alert-info">
+								<i class="bi bi-info-circle me-2"></i>Total a pagar: <span id="total-pago-modal"
+									class="fw-bold">$0.00</span>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+							<button type="button" class="btn btn-success" onclick="confirmarPago()">Confirmar
+								Pago</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="consulta_articulos" class="my-4" style="display: none;">
+				<h2 class="text-center mb-4 text-2xl font-bold text-blue-400">Consulta de Artículos</h2>
+				<!-- Buscador -->
+				<div class="flex flex-col md:flex-row gap-2 mb-4">
+					<input type="text"
+						class="form-control flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+						id="busqueda_keyword" placeholder="Buscar por nombre o descripción">
+					<button
+						class="btn btn-primary px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition"
+						type="button" onclick="buscarArticulos()">
+						<i class="bi bi-search"></i> Buscar
+					</button>
+				</div>
+				<!-- Contenedor de resultados -->
+				<div id="resultado_articulos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+				<!-- Botón para regresar al menú -->
+				<div class="mt-4 text-center">
+					<button
+						class="btn btn-secondary px-4 py-2 rounded-md border border-zinc-500 text-zinc-200 hover:bg-zinc-800 transition"
+						onclick="oculta_pantalla('consulta_articulos')">
+						<i class="bi bi-arrow-left"></i> Regresar
+					</button>
+				</div>
+			</div>
+
+
+
 		</div>
 
-		<div class="modal fade" id="modalDetalleArticulo" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="modalDetalleTitulo">Detalle del Artículo</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body" id="modalDetalleContenido">
-						<!-- Contenido dinámico -->
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-						<button type="button" class="btn btn-primary">Agregar al carrito</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="carrito" class="container my-5" style="display:none;">
-			<div class="card shadow">
-				<div class="card-header bg-warning text-dark text-center py-3">
-					<h3 class="mb-0"><i class="bi bi-cart-fill me-2"></i>Carrito de Compras</h3>
-				</div>
-				<div class="card-body">
-					<!-- Resumen del Pedido -->
-					<div class="d-flex justify-content-between mb-4 p-3 bg-light rounded">
-						<div>
-							<span class="fw-bold">Artículos:</span>
-							<span id="contador-articulos" class="badge bg-primary ms-2">0</span>
-						</div>
-						<div>
-							<span class="fw-bold">Total:</span>
-							<span id="total-carrito" class="fs-5 fw-bold text-success ms-2">$0.00</span>
-						</div>
-					</div>
-
-					<!-- Lista de Artículos -->
-					<div id="contenido_carrito" class="mb-4">
-						<!-- Mensaje cuando el carrito está vacío -->
-						<div id="carrito-vacio" class="text-center py-5">
-							<i class="bi bi-cart-x" style="font-size: 3rem; color: #6c757d;"></i>
-							<h5 class="mt-3 text-muted">Tu carrito está vacío</h5>
-							<p class="text-muted">Agrega artículos desde la sección de productos</p>
-						</div>
-					</div>
-
-					<!-- Opciones de Envío -->
-					<div class="mb-4">
-						<h5 class="mb-3"><i class="bi bi-truck me-2"></i>Método de Envío</h5>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="metodoEnvio" id="envioEstandar" checked>
-							<label class="form-check-label" for="envioEstandar">
-								Envío estándar (3-5 días) - $50.00
-							</label>
-						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="metodoEnvio" id="envioExpress">
-							<label class="form-check-label" for="envioExpress">
-								Envío express (24 horas) - $120.00
-							</label>
-						</div>
-					</div>
-
-					<!-- Cupón de Descuento -->
-					<div class="mb-4">
-						<label for="codigoCupon" class="form-label"><i class="bi bi-tag me-2"></i>Cupón de
-							descuento</label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="codigoCupon" placeholder="Ingresa tu código">
-							<button class="btn btn-outline-secondary" type="button">Aplicar</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="card-footer bg-light">
-					<div class="d-grid gap-2">
-						<button class="btn btn-success btn-lg" onclick="procesarPago()">
-							<i class="bi bi-credit-card me-2"></i>Proceder al Pago
-						</button>
-						<button class="btn btn-outline-danger" onclick="vaciarCarrito()">
-							<i class="bi bi-trash me-2"></i>Vaciar Carrito
-						</button>
-						<button class="btn btn-outline-primary" onclick="oculta_pantalla('menu');oculta_pantalla('carrito');muestra_pantalla('consulta_articulos');">
-							<i class="bi bi-arrow-left me-2"></i>Seguir Comprando
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal de Confirmación de Pago -->
-		<div class="modal fade" id="confirmacionPago" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header bg-success text-white">
-						<h5 class="modal-title"><i class="bi bi-check-circle me-2"></i>Confirmar Compra</h5>
-						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p>¿Estás seguro que deseas proceder con el pago?</p>
-						<div class="alert alert-info">
-							<i class="bi bi-info-circle me-2"></i>Total a pagar: <span id="total-pago-modal"
-								class="fw-bold">$0.00</span>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-						<button type="button" class="btn btn-success" onclick="confirmarPago()">Confirmar Pago</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="consulta_articulos" class="container my-4" style="display: none;">
-			<h2 class="text-center mb-4">Consulta de Artículos</h2>
-
-			<!-- Buscador -->
-			<div class="input-group mb-4">
-				<input type="text" class="form-control" id="busqueda_keyword"
-					placeholder="Buscar por nombre o descripción">
-				<button class="btn btn-primary" type="button" onclick="buscarArticulos()">
-					<i class="bi bi-search"></i> Buscar
-				</button>
-			</div>
-
-			<!-- Contenedor de resultados -->
-			<div id="resultado_articulos" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"></div>
-
-			<!-- Botón para regresar al menú -->
-			<div class="mt-4 text-center">
-				<!--<button type="button" onclick="muestra_pantalla('consulta_articulos')"
-					class="btn btn-success text-start">
-					<i class="bi bi-search me-2"></i>Compra de Artículos
-				</button>-->
-				<button class="btn btn-secondary" onclick="oculta_pantalla('consulta_articulos')">
-					<i class="bi bi-arrow-left"></i> Regresar
-				</button>
-			</div>
-		</div>
-
-
-
-	</div>
-
-	<script src='./WSClient.js'></script>
+		<script src='./WSClient.js'></script>
+		<script>
+			function toggleMenu() {
+				const sidebar = document.getElementById('sidebar-menu');
+				const overlay = document.getElementById('menu-overlay');
+				const isOpen = sidebar.classList.contains('translate-x-0');
+				if (isOpen) {
+					sidebar.classList.remove('translate-x-0');
+					sidebar.classList.add('-translate-x-full');
+					overlay.classList.add('hidden');
+				} else {
+					sidebar.classList.remove('-translate-x-full');
+					sidebar.classList.add('translate-x-0');
+					overlay.classList.remove('hidden');
+				}
+			}
+			document.getElementById('btn-menu').addEventListener('click', toggleMenu);
+		</script>
 </body>
 
 </html>
