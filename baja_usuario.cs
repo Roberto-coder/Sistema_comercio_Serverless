@@ -1,74 +1,58 @@
-// (c) Carlos Pineda Guerrero. 2025
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
+
 namespace FunctionApp1
 {
-    public class borra_usuario
+    public class baja_usuario
     {
-        class ParamBorraUsuario
+        class ParamBajaUsuario
         {
             public string? email;
         }
+
         class Error
         {
             public string mensaje;
-            public Error(string mensaje)
-            {
-                this.mensaje = mensaje;
-            }
+            public Error(string mensaje) { this.mensaje = mensaje; }
         }
+
         [Function("borra_usuario")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get","post")]
+            [HttpTrigger(AuthorizationLevel.Function, "post")]
             HttpRequest req)
         {
             try
             {
-                string? email = req.Query["email"];
-                if (email == null)
-                {
-                    string body = await new StreamReader(req.Body).ReadToEndAsync();
-                    ParamBorraUsuario? data = JsonConvert.DeserializeObject<ParamBorraUsuario>(body);
-                    if (data == null || data.email == null) throw new Exception("Se esperan el email");
-                    email = data.email;
-                }
+                string body = await new StreamReader(req.Body).ReadToEndAsync();
+                ParamBajaUsuario? data = JsonConvert.DeserializeObject<ParamBajaUsuario>(body);
+                if (data == null || data.email == null) throw new Exception("Falta el email");
+
                 string? Server = Environment.GetEnvironmentVariable("Server");
                 string? UserID = Environment.GetEnvironmentVariable("UserID");
                 string? Password = Environment.GetEnvironmentVariable("Password");
                 string? Database = Environment.GetEnvironmentVariable("Database");
-                string cs = "Server=" + Server + ";UserID=" + UserID + ";Password=" + Password + ";" + "Database=" + Database + ";SslMode=Preferred;";
-                var conexion = new MySqlConnection(cs);
+
+                string cs = $"Server={Server};UserID={UserID};Password={Password};Database={Database};SslMode=Preferred;";
+                using var conexion = new MySqlConnection(cs);
                 conexion.Open();
-                MySqlTransaction transaccion = conexion.BeginTransaction();
-                try
-                {
-                    var cmd_2 = new MySqlCommand();
-                    cmd_2.Connection = conexion;
-                    cmd_2.Transaction = transaccion;
-                    cmd_2.CommandText = "DELETE FROM fotos_usuarios WHERE id_usuario=(SELECT id_usuario FROM usuarios WHERE email=@email)";
-                    cmd_2.Parameters.AddWithValue("@email", email);
-                    cmd_2.ExecuteNonQuery();
-                    var cmd_3 = new MySqlCommand();
-                    cmd_3.Connection = conexion;
-                    cmd_3.Transaction = transaccion;
-                    cmd_3.CommandText = "DELETE FROM usuarios WHERE email=@email";
-                    cmd_3.Parameters.AddWithValue("@email", email);
-                    cmd_3.ExecuteNonQuery();
-                    transaccion.Commit();
-                    return new OkObjectResult("Se modificó el usuario");
-                }
-                catch (Exception e)
-                {
-                    transaccion.Rollback();
-                    throw new Exception(e.Message);
-                }
-                finally
-                {
-                    conexion.Close();
-                }
+                using var tx = conexion.BeginTransaction();
+
+                var eliminarFoto = new MySqlCommand(
+                    "DELETE FROM fotos_usuarios WHERE id_usuario=(SELECT id_usuario FROM usuarios WHERE email=@correo)",
+                    conexion, tx);
+                eliminarFoto.Parameters.AddWithValue("@correo", data.email);
+                eliminarFoto.ExecuteNonQuery();
+
+                var eliminarUsuario = new MySqlCommand(
+                    "DELETE FROM usuarios WHERE email=@correo", conexion, tx);
+                eliminarUsuario.Parameters.AddWithValue("@correo", data.email);
+                eliminarUsuario.ExecuteNonQuery();
+
+                tx.Commit();
+                return new OkObjectResult("Usuario eliminado");
             }
             catch (Exception e)
             {
@@ -76,4 +60,4 @@ namespace FunctionApp1
             }
         }
     }
- }
+}

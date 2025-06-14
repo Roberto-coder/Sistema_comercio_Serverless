@@ -1,9 +1,12 @@
-// (c) Carlos Pineda Guerrero. 2025
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+
 namespace FunctionApp1
 {
     public class alta_usuario
@@ -17,12 +20,15 @@ namespace FunctionApp1
             public DateTime? fecha_nacimiento;
             public long? telefono;
             public string? genero;
-            public string? foto;  // foto en base 64
+            public string? foto;
+            public string? password;
         }
+
         class ParamAltaUsuario
         {
             public Usuario? usuario;
         }
+
         class Error
         {
             public string mensaje;
@@ -31,6 +37,12 @@ namespace FunctionApp1
                 this.mensaje = mensaje;
             }
         }
+
+        private string GeneraToken()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+        }
+
         [Function("alta_usuario")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post")]
@@ -40,61 +52,79 @@ namespace FunctionApp1
             {
                 string body = await new StreamReader(req.Body).ReadToEndAsync();
                 ParamAltaUsuario? data = JsonConvert.DeserializeObject<ParamAltaUsuario>(body);
-                if (data == null || data.usuario == null) throw new Exception("Se esperan los datos del usuario");
-                Usuario? usuario = data.usuario;
-                if (usuario.email == null || usuario.email == "") throw new Exception("Se debe ingresar el email");
-                if (usuario.nombre == null || usuario.nombre == "") throw new Exception("Se debe ingresar el nombre");
-                if (usuario.apellido_paterno == null || usuario.apellido_paterno == "") throw new Exception("Se debe ingresar el apellido_paterno");
-                if (usuario.fecha_nacimiento == null) throw new Exception("Se debe ingresar la fecha de nacimiento");
+
+                if (data == null || data.usuario == null)
+                    throw new Exception("Se esperan los datos del usuario");
+
+                Usuario usuario = data.usuario;
+
+                if (string.IsNullOrEmpty(usuario.email))
+                    throw new Exception("Se debe ingresar el email");
+                if (string.IsNullOrEmpty(usuario.nombre))
+                    throw new Exception("Se debe ingresar el nombre");
+                if (string.IsNullOrEmpty(usuario.apellido_paterno))
+                    throw new Exception("Se debe ingresar el apellido paterno");
+                if (usuario.fecha_nacimiento == null)
+                    throw new Exception("Se debe ingresar la fecha de nacimiento");
+                if (string.IsNullOrEmpty(usuario.password))
+                    throw new Exception("Se debe ingresar la contraseña");
+
                 string? Server = Environment.GetEnvironmentVariable("Server");
                 string? UserID = Environment.GetEnvironmentVariable("UserID");
                 string? Password = Environment.GetEnvironmentVariable("Password");
                 string? Database = Environment.GetEnvironmentVariable("Database");
-                string cs = "Server=" + Server + ";UserID=" + UserID + ";Password=" + Password + ";" + "Database=" + Database + ";SslMode=Preferred;";
-                var conexion = new MySqlConnection(cs);
+
+                string cs = $"Server={Server};UserID={UserID};Password={Password};Database={Database};SslMode=Preferred;";
+                using var conexion = new MySqlConnection(cs);
                 conexion.Open();
-                MySqlTransaction transaccion = conexion.BeginTransaction();
+
+                using var transaccion = conexion.BeginTransaction();
                 try
                 {
-                    MySqlCommand? cmd_1 = new MySqlCommand();
-                    cmd_1.Connection = conexion;
-                    cmd_1.Transaction = transaccion;
-                    cmd_1.CommandText = "INSERT INTO usuarios(id_usuario,email,nombre,apellido_paterno,apellido_materno,fecha_nacimiento,telefono,genero) VALUES (0,@email,@nombre,@apellido_paterno,@apellido_materno,@fecha_nacimiento,@telefono,@genero)";
-                    cmd_1.Parameters.AddWithValue("@email", usuario.email);
-                    cmd_1.Parameters.AddWithValue("@nombre", usuario.nombre);
-                    cmd_1.Parameters.AddWithValue("@apellido_paterno", usuario.apellido_paterno);
-                    cmd_1.Parameters.AddWithValue("@apellido_materno", usuario.apellido_materno);
-                    cmd_1.Parameters.AddWithValue("@fecha_nacimiento", usuario.fecha_nacimiento);
-                    cmd_1.Parameters.AddWithValue("@telefono", usuario.telefono);
-                    cmd_1.Parameters.AddWithValue("@genero", usuario.genero);
-                    cmd_1.ExecuteNonQuery();
-                    long id_usuario = cmd_1.LastInsertedId;
+                    string token = GeneraToken();
+                    var cmd = new MySqlCommand(@"
+                        INSERT INTO usuarios(id_usuario, email, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, telefono, genero, password, token) 
+                        VALUES (0, @e, @n, @ap, @am, @f, @t, @g, @p, @token)", conexion, transaccion);
+
+                    cmd.Parameters.AddWithValue("@e", usuario.email);
+                    cmd.Parameters.AddWithValue("@n", usuario.nombre);
+                    cmd.Parameters.AddWithValue("@ap", usuario.apellido_paterno);
+                    cmd.Parameters.AddWithValue("@am", usuario.apellido_materno);
+                    cmd.Parameters.AddWithValue("@f", usuario.fecha_nacimiento);
+                    cmd.Parameters.AddWithValue("@t", usuario.telefono);
+                    cmd.Parameters.AddWithValue("@g", usuario.genero);
+                    cmd.Parameters.AddWithValue("@p", usuario.password);
+                    cmd.Parameters.AddWithValue("@token", token);
+                    cmd.ExecuteNonQuery();
+
+                    long id_usuario = cmd.LastInsertedId;
+
                     if (usuario.foto != null)
                     {
-                        var cmd_2 = new MySqlCommand();
-                        cmd_2.Connection = conexion;
-                        cmd_2.Transaction = transaccion;
-                        cmd_2.CommandText = "INSERT INTO fotos_usuarios (foto,id_usuario) VALUES (@foto,@id_usuario)";
-                        cmd_2.Parameters.AddWithValue("@foto", Convert.FromBase64String(usuario.foto));
-                        cmd_2.Parameters.AddWithValue("@id_usuario", id_usuario);
-                        cmd_2.ExecuteNonQuery();
+                        var cmd_foto = new MySqlCommand("INSERT INTO fotos_usuarios (foto,id_usuario) VALUES (@foto,@id_usuario)", conexion, transaccion);
+                        cmd_foto.Parameters.AddWithValue("@foto", Convert.FromBase64String(usuario.foto));
+                        cmd_foto.Parameters.AddWithValue("@id_usuario", id_usuario);
+                        cmd_foto.ExecuteNonQuery();
                     }
+
                     transaccion.Commit();
-                    return new OkObjectResult("Se dió de alta el usuario");
+
+                    return new OkObjectResult(JsonConvert.SerializeObject(new
+                    {
+                        mensaje = "Usuario creado correctamente",
+                        id_usuario = id_usuario,
+                        token = token
+                    }));
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     transaccion.Rollback();
-                    throw new Exception(e.Message);
-                }
-                finally
-                {
-                    conexion.Close();
+                    throw new Exception(ex.Message);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(new Error(e.Message)));
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(new Error(ex.Message)));
             }
         }
     }
