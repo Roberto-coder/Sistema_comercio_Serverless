@@ -11,10 +11,14 @@
 	<!-- Bootstrap JS (opcional, solo si usas componentes interactivos) -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-	<script src='./WSClient.js'></script>
+	<!-- <script src='./WSClient.js'></script> -->
+	<script src="https://t8ap2022630445.azurewebsites.net/api/Get?nombre=WSClient.js"></script>
+
 	<script>
 		//var URL = "/Servicio/rest/ws"; 
-		var URL = "http://localhost:7071/api";
+		//var URL = "http://localhost:7071/api";
+		const URL = "https://t8ap2022630445.azurewebsites.net/api";
+		const HOST = "https://t8ap2022630445.azurewebsites.net/api/Get?nombre=";
 
 		// Función para mostrar/ocultar contraseña
 		document.querySelectorAll('.toggle-password').forEach(button => {
@@ -73,7 +77,7 @@
 			get("alta_genero").value = "";
 			get("alta_password").value = "";
 			get("alta_confirm_password").value = "";
-			get("alta_imagen").src = "./usuario_sin_foto.png";
+			get("alta_imagen").src = HOST +"./usuario_sin_foto.png";
 			foto = null;
 		}
 		function alta() {
@@ -135,7 +139,7 @@
 			get("consulta_fecha_nacimiento").value = "";
 			get("consulta_telefono").value = "";
 			get("consulta_genero").value = "";
-			get("consulta_imagen").src = "./usuario_sin_foto.png";
+			get("consulta_imagen").src = HOST +"./usuario_sin_foto.png";
 		}
 		function cierra_pantalla_consulta() {
 			oculta_pantalla('consulta_usuario');
@@ -147,7 +151,7 @@
 		}
 		function quita_foto() {
 			foto = null;
-			get('consulta_imagen').src = './usuario_sin_foto.png';
+			get('consulta_imagen').src = HOST +'./usuario_sin_foto.png';
 			get('consulta_file').value = '';
 		}
 		function formatearFecha(fecha) {
@@ -180,7 +184,7 @@
 						get("consulta_genero").value = result.genero == "M" ? "Masculino" : result.genero == "F" ? "Femenino" : "";
 						get("modifica_password").value = result.password || "";
 						foto = result.foto;
-						get("consulta_imagen").src = foto != null ? "data:image/jpeg;base64," + foto : "./usuario_sin_foto.png"
+						get("consulta_imagen").src = foto != null ? "data:image/jpeg;base64," + foto : HOST +"./usuario_sin_foto.png"
 
 						oculta("encabezado_consulta");
 						muestra("encabezado_modifica");
@@ -694,8 +698,10 @@
 						<!-- Foto -->
 						<div class="mb-3 text-center">
 							<div class="d-flex flex-column align-items-center">
-								<img id="alta_imagen" class="img-thumbnail mb-3" width="150" src="./usuario_sin_foto.png"
-									style="object-fit: cover; height: 150px;">
+								<img id="alta_imagen" class="img-thumbnail mb-3" width="150"
+								src="https://t8ap2022630445.azurewebsites.net/api/Get?nombre=usuario_sin_foto.png"
+								style="object-fit: cover; height: 150px;">
+
 								<div class="w-100">
 									<input type="file" class="form-control" id="alta_foto"
 										onchange="readSingleFile(files,get('alta_imagen'))" accept="image/*">
@@ -817,7 +823,9 @@
 							<div class="mb-4 text-center">
 								<div class="d-flex flex-column align-items-center">
 									<img id="consulta_imagen" class="img-thumbnail mb-3" width="150"
-										src="./usuario_sin_foto.png" style="object-fit: cover; height: 150px;">
+									src="https://t8ap2022630445.azurewebsites.net/api/Get?nombre=usuario_sin_foto.png"
+									style="object-fit: cover; height: 150px;">
+
 									<div class="d-flex gap-2">
 										<div class="flex-grow-1">
 											<input type="file" class="form-control" id="consulta_file"
@@ -1264,7 +1272,8 @@
 
 	</div>
 
-	<script src='./WSClient.js'></script>
+	<!-- <script src='./WSClient.js'></script> -->
+	<script src="https://t8ap2022630445.azurewebsites.net/api/Get?nombre=WSClient.js"></script>
 </body>
 
 </html>

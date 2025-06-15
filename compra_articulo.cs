@@ -26,7 +26,7 @@ namespace FunctionApp1
 
         [Function("compra_articulo")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")]
             HttpRequest req)
         {
             try
