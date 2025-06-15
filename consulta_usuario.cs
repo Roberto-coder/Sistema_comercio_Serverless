@@ -37,7 +37,7 @@ namespace FunctionApp1
 
         [Function("consulta_usuario")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")]
             HttpRequest req)
         {
             try

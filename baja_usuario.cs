@@ -21,7 +21,7 @@ namespace FunctionApp1
 
         [Function("borra_usuario")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")]
             HttpRequest req)
         {
             try

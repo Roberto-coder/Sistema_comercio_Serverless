@@ -13,7 +13,9 @@
 	<!-- Bootstrap JS (opcional, solo si usas componentes interactivos) -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-	<script src='./WSClient.js'></script>
+
+	<!-- <script src='./WSClient.js'></script> -->
+	<script src="https://t8apBoleta.azurewebsites.net/api/Get?nombre=WSClient.js"></script>
 
 	<style>
 		/* Estilos personalizados si son necesarios */
@@ -42,7 +44,8 @@
 
 	<script>
 		//var URL = "/Servicio/rest/ws"; 
-		var URL = "http://localhost:7071/api";
+		const URL = "https://t8apBoleta.azurewebsites.net/api";
+		const HOST = "https://t8apBoleta.azurewebsites.net/api/Get?nombre=";
 
 		// Función para mostrar/ocultar contraseña
 		document.querySelectorAll('.toggle-password').forEach(button => {
@@ -101,7 +104,7 @@
 			get("alta_genero").value = "";
 			get("alta_password").value = "";
 			get("alta_confirm_password").value = "";
-			get("alta_imagen").src = "usuario_sin_foto.png";
+			get("alta_imagen").src = HOST +"./usuario_sin_foto.png";
 			foto = null;
 		}
 		function alta() {
@@ -163,7 +166,7 @@
 			get("consulta_fecha_nacimiento").value = "";
 			get("consulta_telefono").value = "";
 			get("consulta_genero").value = "";
-			get("consulta_imagen").src = "usuario_sin_foto.png";
+			get("consulta_imagen").src = HOST +"./usuario_sin_foto.png";
 		}
 		function cierra_pantalla_consulta() {
 			oculta_pantalla('consulta_usuario');
@@ -175,7 +178,7 @@
 		}
 		function quita_foto() {
 			foto = null;
-			get('consulta_imagen').src = 'usuario_sin_foto.png';
+			get('consulta_imagen').src = HOST +'./usuario_sin_foto.png';
 			get('consulta_file').value = '';
 		}
 		function formatearFecha(fecha) {
@@ -208,7 +211,7 @@
 						get("consulta_genero").value = result.genero == "M" ? "Masculino" : result.genero == "F" ? "Femenino" : "";
 						get("modifica_password").value = result.password || "";
 						foto = result.foto;
-						get("consulta_imagen").src = foto != null ? "data:image/jpeg;base64," + foto : "usuario_sin_foto.png"
+						get("consulta_imagen").src = foto != null ? "data:image/jpeg;base64," + foto : HOST +"./usuario_sin_foto.png"
 
 						oculta("encabezado_consulta");
 						muestra("encabezado_modifica");
@@ -770,8 +773,8 @@
 							<div class="mb-3 text-center">
 								<div class="d-flex flex-column align-items-center">
 									<img id="alta_imagen" class="img-thumbnail mb-3" width="150"
-										src="usuario_sin_foto.png" style="object-fit: cover; height: 150px;">
-									<div class="w-100">
+									src="https://t8apBoleta.azurewebsites.net/api/Get?nombre=usuario_sin_foto.png"
+									style="object-fit: cover; height: 150px;">
 										<input type="file" class="form-control text-blue-600" id="alta_foto"
 											onchange="readSingleFile(files,get('alta_imagen'))" accept="image/*">
 										<small class="text-muted">Formatos aceptados: JPG, PNG (Máx. 2MB)</small>
@@ -912,8 +915,9 @@
 
 								<div class="mb-4 text-center">
 									<div class="flex flex-col items-center">
-										<img id="consulta_imagen" class="rounded-md mb-3 w-32 h-32 object-cover border"
-											src="usuario_sin_foto.png">
+										<img id="consulta_imagen" class="img-thumbnail mb-3" width="150"
+										src="https://t8apBoleta.azurewebsites.net/api/Get?nombre=usuario_sin_foto.png"
+										style="object-fit: cover; height: 150px;">
 										<div class="flex gap-2 w-full">
 											<div class="flex-1">
 												<input type="file" id="consulta_file"

@@ -22,7 +22,7 @@ namespace FunctionApp1
 
         [Function("elimina_carrito_compra")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             try
             {

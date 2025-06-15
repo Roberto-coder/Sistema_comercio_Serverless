@@ -36,7 +36,7 @@ namespace Sistema_comercio_Serverless
 
         [Function("modifica_usuario")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             try
             {
