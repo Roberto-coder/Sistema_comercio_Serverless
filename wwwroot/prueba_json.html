@@ -101,7 +101,7 @@
 			get("alta_genero").value = "";
 			get("alta_password").value = "";
 			get("alta_confirm_password").value = "";
-			get("alta_imagen").src = "./usuario_sin_foto.png";
+			get("alta_imagen").src = "usuario_sin_foto.png";
 			foto = null;
 		}
 		function alta() {
@@ -163,7 +163,7 @@
 			get("consulta_fecha_nacimiento").value = "";
 			get("consulta_telefono").value = "";
 			get("consulta_genero").value = "";
-			get("consulta_imagen").src = "./usuario_sin_foto.png";
+			get("consulta_imagen").src = "usuario_sin_foto.png";
 		}
 		function cierra_pantalla_consulta() {
 			oculta_pantalla('consulta_usuario');
@@ -175,7 +175,7 @@
 		}
 		function quita_foto() {
 			foto = null;
-			get('consulta_imagen').src = './usuario_sin_foto.png';
+			get('consulta_imagen').src = 'usuario_sin_foto.png';
 			get('consulta_file').value = '';
 		}
 		function formatearFecha(fecha) {
@@ -208,7 +208,7 @@
 						get("consulta_genero").value = result.genero == "M" ? "Masculino" : result.genero == "F" ? "Femenino" : "";
 						get("modifica_password").value = result.password || "";
 						foto = result.foto;
-						get("consulta_imagen").src = foto != null ? "data:image/jpeg;base64," + foto : "./usuario_sin_foto.png"
+						get("consulta_imagen").src = foto != null ? "data:image/jpeg;base64," + foto : "usuario_sin_foto.png"
 
 						oculta("encabezado_consulta");
 						muestra("encabezado_modifica");
@@ -292,7 +292,6 @@
 				cargarCarrito(); // Asegúrate de que esta función esté definida
 			}
 		}
-
 
 		function limpia_borra() {
 			get("borra_email").value = "";
@@ -524,7 +523,7 @@
 			const contenedor = get("contenido_carrito");
 			const vacio = get("carrito-vacio");
 			const contador = get("contador-articulos");
-			const total = get("total-carrito");
+			const total = get("total-articulos"); // <-- corregido aquí
 
 			// Validación defensiva
 			if (!contenedor || !vacio || !contador || !total) {
@@ -537,7 +536,7 @@
 				vacio.style.display = "block";
 				contador.innerText = "0";
 				total.innerText = "$0.00";
-				//contenedor.innerHTML = ""; // limpiar lista anterior
+				contenedor.innerHTML = ""; // limpiar lista anterior
 				return;
 			} else {
 				vacio.style.display = "none";
@@ -695,7 +694,7 @@
 							<div class="mb-3">
 								<label for="alta_email" class="form-label fw-bold">Email <span
 										class="text-danger">*</span></label>
-								<input type="email" class="form-control form-control-lg" id="alta_email" required>
+								<input type="email" class="form-control form-control-lg text-blue-600" id="alta_email" required>
 								<div class="invalid-feedback">Por favor ingresa un email válido.</div>
 							</div>
 
@@ -705,7 +704,7 @@
 									<label for="alta_password" class="form-label fw-bold">Contraseña <span
 											class="text-danger">*</span></label>
 									<div class="input-group">
-										<input type="password" class="form-control" id="alta_password" required>
+										<input type="password" class="form-control text-blue-600" id="alta_password" required>
 										<button class="btn btn-outline-secondary toggle-password" type="button">
 											<i class="bi bi-eye"></i>
 										</button>
@@ -716,7 +715,7 @@
 									<label for="alta_confirm_password" class="form-label fw-bold">Confirmar Contraseña
 										<span class="text-danger">*</span></label>
 									<div class="input-group">
-										<input type="password" class="form-control" id="alta_confirm_password" required>
+										<input type="password" class="form-control text-blue-600" id="alta_confirm_password" required>
 										<button class="btn btn-outline-secondary toggle-password" type="button">
 											<i class="bi bi-eye"></i>
 										</button>
@@ -729,19 +728,19 @@
 								<div class="col-md-6 mb-3">
 									<label for="alta_nombre" class="form-label fw-bold">Nombre <span
 											class="text-danger">*</span></label>
-									<input type="text" class="form-control" id="alta_nombre" required>
+									<input type="text" class="form-control text-blue-600" id="alta_nombre" required>
 								</div>
 								<div class="col-md-6 mb-3">
 									<label for="alta_apellido_paterno" class="form-label fw-bold">Apellido paterno <span
 											class="text-danger">*</span></label>
-									<input type="text" class="form-control" id="alta_apellido_paterno" required>
+									<input type="text" class="form-control text-blue-600" id="alta_apellido_paterno" required>
 								</div>
 							</div>
 
 							<!-- Apellido materno -->
 							<div class="mb-3">
 								<label for="alta_apellido_materno" class="form-label">Apellido materno</label>
-								<input type="text" class="form-control" id="alta_apellido_materno">
+								<input type="text" class="form-control text-blue-600" id="alta_apellido_materno">
 							</div>
 
 							<!-- Fecha y teléfono -->
@@ -749,18 +748,18 @@
 								<div class="col-md-6 mb-3">
 									<label for="alta_fecha_nacimiento" class="form-label fw-bold">Fecha de nacimiento
 										<span class="text-danger">*</span></label>
-									<input type="date" class="form-control" id="alta_fecha_nacimiento" required>
+									<input type="date" class="form-control text-blue-600" id="alta_fecha_nacimiento" required>
 								</div>
 								<div class="col-md-6 mb-3">
 									<label for="alta_telefono" class="form-label">Teléfono</label>
-									<input type="tel" class="form-control" id="alta_telefono" pattern="[0-9]{10}">
+									<input type="tel" class="form-control text-blue-600" id="alta_telefono" pattern="[0-9]{10}">
 								</div>
 							</div>
 
 							<!-- Género -->
 							<div class="mb-3">
 								<label for="alta_genero" class="form-label">Género</label>
-								<select id="alta_genero" class="form-select">
+								<select id="alta_genero" class="form-select text-blue-600">
 									<option value="" selected disabled>Seleccionar</option>
 									<option value="Masculino">Masculino</option>
 									<option value="Femenino">Femenino</option>
@@ -771,9 +770,9 @@
 							<div class="mb-3 text-center">
 								<div class="d-flex flex-column align-items-center">
 									<img id="alta_imagen" class="img-thumbnail mb-3" width="150"
-										src="./usuario_sin_foto.png" style="object-fit: cover; height: 150px;">
+										src="usuario_sin_foto.png" style="object-fit: cover; height: 150px;">
 									<div class="w-100">
-										<input type="file" class="form-control" id="alta_foto"
+										<input type="file" class="form-control text-blue-600" id="alta_foto"
 											onchange="readSingleFile(files,get('alta_imagen'))" accept="image/*">
 										<small class="text-muted">Formatos aceptados: JPG, PNG (Máx. 2MB)</small>
 									</div>
@@ -820,7 +819,7 @@
 									class="text-red-500">*</span></label>
 							<div class="flex">
 								<input type="email" id="consulta_email" placeholder="usuario@dominio.com" required
-									class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 								<button id="boton_consulta" type="button" onclick="consulta()"
 									class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 transition">
 									<i class="bi bi-search mr-2"></i>Buscar
@@ -838,7 +837,7 @@
 											Contraseña</label>
 										<div class="relative">
 											<input type="password" id="modifica_password"
-												class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+												class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 											<button type="button"
 												class="absolute inset-y-0 right-0 px-3 flex items-center toggle-password">
 												<i class="bi bi-eye"></i>
@@ -851,7 +850,7 @@
 											Contraseña</label>
 										<div class="relative">
 											<input type="password" id="modifica_confirm_password"
-												class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+												class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 											<button type="button"
 												class="absolute inset-y-0 right-0 px-3 flex items-center toggle-password">
 												<i class="bi bi-eye"></i>
@@ -866,14 +865,14 @@
 											class="block text-sm font-medium text-gray-700 mb-1">Nombre <span
 												class="text-red-500">*</span></label>
 										<input type="text" id="consulta_nombre" required
-											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 									</div>
 									<div>
 										<label for="consulta_apellido_paterno"
 											class="block text-sm font-medium text-gray-700 mb-1">Apellido Paterno <span
 												class="text-red-500">*</span></label>
 										<input type="text" id="consulta_apellido_paterno" required
-											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 									</div>
 								</div>
 
@@ -881,7 +880,7 @@
 									<label for="consulta_apellido_materno"
 										class="block text-sm font-medium text-gray-700 mb-1">Apellido Materno</label>
 									<input type="text" id="consulta_apellido_materno"
-										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 								</div>
 
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -890,13 +889,13 @@
 											class="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento
 											<span class="text-red-500">*</span></label>
 										<input type="date" id="consulta_fecha_nacimiento" required
-											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 									</div>
 									<div>
 										<label for="consulta_telefono"
 											class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
 										<input type="tel" id="consulta_telefono" pattern="[0-9]{10}"
-											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 									</div>
 								</div>
 
@@ -904,7 +903,7 @@
 									<label for="consulta_genero"
 										class="block text-sm font-medium text-gray-700 mb-1">Género</label>
 									<select id="consulta_genero"
-										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 										<option value="" selected disabled>Seleccionar</option>
 										<option value="Masculino">Masculino</option>
 										<option value="Femenino">Femenino</option>
@@ -914,13 +913,13 @@
 								<div class="mb-4 text-center">
 									<div class="flex flex-col items-center">
 										<img id="consulta_imagen" class="rounded-md mb-3 w-32 h-32 object-cover border"
-											src="./usuario_sin_foto.png">
+											src="usuario_sin_foto.png">
 										<div class="flex gap-2 w-full">
 											<div class="flex-1">
 												<input type="file" id="consulta_file"
 													onchange="readSingleFile(files,get('consulta_imagen'))"
 													accept="image/*"
-													class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+													class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 											</div>
 											<button type="button" onclick="quita_foto()"
 												class="px-3 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50">
@@ -968,7 +967,7 @@
 								<label for="borra_email" class="block text-sm font-medium text-gray-700 mb-1">Email del
 									usuario a eliminar <span class="text-red-500">*</span></label>
 								<input type="email" id="borra_email" placeholder="usuario@ejemplo.com" required
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 								<p class="mt-1 text-xs text-red-600 hidden">Por favor ingrese un email válido</p>
 							</div>
 
@@ -987,34 +986,6 @@
 					<div class="bg-zinc-900 text-zinc-400 text-xs p-3">
 						<i class="bi bi-info-circle-fill mr-2"></i>Se eliminarán todos los datos asociados a este
 						usuario.
-					</div>
-				</div>
-			</div>
-
-			<!-- Modal de Confirmación -->
-			<div id="confirmacionBorrado"
-				class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-				<div class="bg-white rounded-lg max-w-md w-full">
-					<div class="bg-red-600 text-white py-3 px-4 rounded-t-lg">
-						<h5 class="text-lg font-semibold"><i class="bi bi-exclamation-octagon-fill mr-2"></i>Confirmar
-							Eliminación</h5>
-					</div>
-					<div class="p-4">
-						<p>¿Está completamente seguro que desea eliminar permanentemente al usuario <strong
-								id="emailConfirmacion" class="font-semibold"></strong>?</p>
-						<p class="text-red-600 font-bold mt-2">Esta acción no se puede deshacer.</p>
-					</div>
-					<div class="bg-gray-100 px-4 py-3 rounded-b-lg flex justify-end space-x-3">
-						<button type="button"
-							onclick="document.getElementById('confirmacionBorrado').classList.add('hidden')"
-							class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-200">
-							<i class="bi bi-x-circle mr-2"></i>Cancelar
-						</button>
-						<button type="button"
-							onclick="borra(); document.getElementById('confirmacionBorrado').classList.add('hidden')"
-							class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
-							<i class="bi bi-check-circle mr-2"></i>Sí, Eliminar
-						</button>
 					</div>
 				</div>
 			</div>
@@ -1046,20 +1017,6 @@
 					</div>
 				</div>
 			</div>
-
-			<script>
-				function confirmarBorrado() {
-					const email = document.getElementById('borra_email').value;
-					if (!email) {
-						alert('Por favor ingrese un email válido');
-						return;
-					}
-
-					document.getElementById('emailConfirmacion').textContent = email;
-					const modal = new bootstrap.Modal(document.getElementById('confirmacionBorrado'));
-					modal.show();
-				}
-			</script>
 
 			<div id="menu" class="mx-auto my-5 max-w-md">
 				<div class="bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-zinc-700">
@@ -1119,20 +1076,20 @@
 						<form id="form-login">
 							<!-- Campo Email -->
 							<div class="mb-4">
-								<label for="login_email" class="block text-sm font-medium text-gray-700 mb-1">Email
+								<label for="login_email" class="block text-sm font-medium text-black-700 mb-1">Email
 									<span class="text-red-500">*</span></label>
 								<input type="email" id="login_email" placeholder="usuario@ejemplo.com" required
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									class="w-full px-3 py-2 border border-grey-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 							</div>
 
 							<!-- Campo Contraseña -->
 							<div class="mb-4">
 								<label for="login_password"
-									class="block text-sm font-medium text-gray-700 mb-1">Contraseña
+									class="block text-sm font-medium text-black-700 mb-1">Contraseña
 									<span class="text-red-500">*</span></label>
 								<div class="relative">
 									<input type="password" id="login_password" required
-										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+										class="w-full px-3 py-2 border border-black-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 									<button type="button"
 										class="absolute inset-y-0 right-0 px-3 flex items-center toggle-password">
 										<i class="bi bi-eye"></i>
@@ -1182,7 +1139,7 @@
 									del
 									Artículo <span class="text-red-500">*</span></label>
 								<input type="text" id="articulo_nombre" placeholder="Ej: Laptop HP 15-dw1024la" required
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 							</div>
 
 							<div class="mb-4">
@@ -1190,7 +1147,7 @@
 									class="block text-sm font-medium text-gray-700 mb-1">Descripción Detallada</label>
 								<textarea id="articulo_descripcion" rows="3"
 									placeholder="Características principales del artículo..."
-									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+									class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600"></textarea>
 							</div>
 
 							<!-- Precio y Cantidad -->
@@ -1204,7 +1161,7 @@
 											class="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-100 text-gray-700 rounded-l-md">$</span>
 										<input type="number" id="articulo_precio" step="0.01" min="0" placeholder="0.00"
 											required
-											class="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											class="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 									</div>
 								</div>
 								<div>
@@ -1213,7 +1170,7 @@
 											class="text-red-500">*</span></label>
 									<input type="number" id="articulo_cantidad" min="0" placeholder="Cantidad en stock"
 										required
-										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 								</div>
 							</div>
 
@@ -1222,14 +1179,14 @@
 								<div class="flex flex-col items-center">
 									<img id="articulo_imagen"
 										class="rounded-md mb-3 w-48 h-48 object-contain bg-gray-100 border"
-										src="/imagen_sin_foto.png">
+										src="usuario_sin_foto.png">
 									<div class="w-full">
 										<label for="articulo_foto"
 											class="block text-sm font-medium text-gray-700 mb-1">Imagen del
 											Artículo</label>
 										<input type="file" id="articulo_foto"
 											onchange="readSingleFile(files,get('articulo_imagen'))" accept="image/*"
-											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+											class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600">
 										<p class="text-xs text-gray-500 mt-1">Formatos aceptados: JPG, PNG (Máx. 2MB)
 										</p>
 									</div>
@@ -1283,21 +1240,39 @@
 						<!-- Resumen del Pedido -->
 						<div class="flex justify-between items-center mb-4 p-3 bg-gray-100 rounded-md">
 							<div class="flex items-center">
-								<span class="font-medium">Artículos:</span>
+								<span class="font-medium text-blue-600">Artículos:</span>
 								<span id="contador-articulos"
 									class="ml-2 bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-semibold"></span>
 							</div>
 							<div class="flex items-center">
-								<span class="font-medium">Total:</span>
-								<span id="total-articulos" class="ml-2 text-lg font-bold">$0.00</span>
+								<span class="font-medium text-blue-600">Total:</span>
+								<span id="total-articulos" class="ml-2 text-lg font-bold text-blue-600">$0.00</span>
 							</div>
 						</div>
 
-						<!-- Botón para proceder al pago -->
-						<div class="flex justify-end">
+						<!-- Lista de Artículos -->
+						<div id="contenido_carrito" class="mb-4">
+							<!-- Mensaje cuando el carrito está vacío -->
+							<div id="carrito-vacio" class="text-center py-5">
+								<i class="bi bi-cart-x" style="font-size: 3rem; color: #6c757d;"></i>
+								<h5 class="mt-3 text-muted">Tu carrito está vacío</h5>
+								<p class="text-muted">Agrega artículos desde la sección de productos</p>
+							</div>
+						</div>
+
+						<!-- Botones para proceder al pago, vaciar y regresar -->
+						<div class="flex flex-wrap gap-2 justify-end">
 							<button type="button" class="btn btn-success" data-bs-toggle="modal"
 								data-bs-target="#confirmacionPago">
 								<i class="bi bi-cart-check me-2"></i>Proceder al Pago
+							</button>
+							<button type="button" class="btn btn-danger" onclick="vaciarCarrito()">
+								<i class="bi bi-trash me-2"></i>Vaciar Carrito
+							</button>
+							<button type="button"
+								class="px-4 py-2 border border-blue-400 text-blue-400 rounded-md hover:bg-zinc-800"
+								onclick="oculta_pantalla('carrito'); muestra_pantalla('consulta_articulos');">
+								<i class="bi bi-arrow-left mr-2"></i>Regresar a Artículos
 							</button>
 						</div>
 					</div>
@@ -1335,7 +1310,7 @@
 				<!-- Buscador -->
 				<div class="flex flex-col md:flex-row gap-2 mb-4">
 					<input type="text"
-						class="form-control flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+						class="form-control flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-600"
 						id="busqueda_keyword" placeholder="Buscar por nombre o descripción">
 					<button
 						class="btn btn-primary px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition"
@@ -1377,6 +1352,26 @@
 			}
 			document.getElementById('btn-menu').addEventListener('click', toggleMenu);
 		</script>
+		<script>
+	function confirmarBorrado() {
+		const email = document.getElementById('borra_email').value;
+		if (!email) {
+			alert('Por favor ingrese un email válido');
+			return;
+		}
+		document.getElementById('emailConfirmacion').textContent = email;
+		// Asegúrate de cerrar cualquier modal previo antes de abrir el nuevo
+		let modalEl = document.getElementById('confirmacionBorrado');
+		// Si ya hay una instancia previa, destrúyela antes de crear una nueva
+		if (modalEl._modalInstance) {
+			modalEl._modalInstance.hide();
+			modalEl._modalInstance = null;
+		}
+		const modal = new bootstrap.Modal(modalEl);
+		modalEl._modalInstance = modal;
+		modal.show();
+	}
+</script>
 </body>
 
 </html>
